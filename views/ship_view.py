@@ -20,6 +20,24 @@ def update_ship(id, ship_data):
 
     return True if rows_affected > 0 else False
 
+def create_ship(ship_data):
+    with sqlite3.connect("./shipping.db") as conn:
+        db_cursor = conn.cursor()
+
+        db_cursor.execute(
+            """
+            INSERT INTO Ship
+                (name, hauler_id)
+            VALUES
+                (?, ?)
+            """,
+            (ship_data['name'], ship_data['hauler_id'])
+        )
+
+        new_id = db_cursor.lastrowid
+
+    return True if new_id > 0 else False
+
 def delete_ship(pk):
     with sqlite3.connect("./shipping.db") as conn:
         conn.row_factory = sqlite3.Row
